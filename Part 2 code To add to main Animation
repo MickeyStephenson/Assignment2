@@ -1,0 +1,106 @@
+-- Part 2: Interacting with Keen Bayonet
+
+-- Function to handle touching body components
+local function touchBodyPart(event)
+    local bodyPart = event.target
+
+    -- Check which body part was touched and play the corresponding animation
+    if event.phase == "began" then
+        if bodyPart.sequence == "mouth" then
+            bodyPart:play()
+        elseif bodyPart.sequence == "nose" then
+            bodyPart:play()
+        elseif bodyPart.sequence == "pectoral" then
+            bodyPart:play()
+        elseif bodyPart.sequence == "tail" then
+            bodyPart:play()
+        end
+
+        -- Play sound here based on the body part touched
+        -- You should implement sound handling logic here
+    elseif event.phase == "ended" or event.phase == "cancelled" then
+        -- Stop the animation
+        bodyPart:pause()
+    end
+end
+
+-- Create touchable body parts
+local mouth = display.newSprite(shark, sheet, mouthSequence)
+mouth.x = 16
+mouth.y = 19
+mouth.sequence = "mouth"
+mouth:addEventListener("touch", touchBodyPart)
+
+local nose = display.newSprite(shark, sheet, noseSequence)
+nose.x = -15.5
+nose.y = 24
+nose.sequence = "nose"
+nose:addEventListener("touch", touchBodyPart)
+
+local pectoral = display.newSprite(shark, sheet, pectoralSequence)
+pectoral.x = 85
+pectoral.y = 37
+pectoral.sequence = "pectoral"
+pectoral:addEventListener("touch", touchBodyPart)
+
+local tail = display.newSprite(shark, sheet, tailSequence)
+tail.x = 159.5
+tail.y = -24
+tail.sequence = "tail"
+tail:addEventListener("touch", touchBodyPart)
+
+-- Implement sound effects here
+-- You can use audio libraries or play sounds from a URL
+
+-- Create a slider for adjusting the scale of Keen Bayonet
+local slider = widget.newSlider
+{
+    top = 450,
+    left = 50,
+    width = 400,
+    value = 100, -- 100% scale by default
+}
+slider:addEventListener("value", function(event)
+    local scale = event.value / 100
+    shark.xScale = 4 * scale
+    shark.yScale = 4 * scale
+end)
+
+-- Create an On-Off switch
+local onOffSwitch = widget.newSwitch
+{
+    left = 50,
+    top = 500,
+    style = "onOff",
+    initialSwitchState = true, -- You can set it to false if you want to start in "off" mode
+}
+
+-- Function to handle drag-and-drop
+local function handleDrag(event)
+    if onOffSwitch.isOn then
+        return true
+    end
+
+    local target = event.target
+    local phase = event.phase
+
+    if phase == "began" then
+        display.getCurrentStage():setFocus(target)
+        target.isFocus = true
+        target.offsetX = event.x - target.x
+        target.offsetY = event.y - target.y
+    elseif target.isFocus then
+        if phase == "moved" then
+            target.x = event.x - target.offsetX
+            target.y = event.y - target.offsetY
+        elseif phase == "ended" or phase == "cancelled" then
+            display.getCurrentStage():setFocus(nil)
+            target.isFocus = false
+        end
+    end
+
+    return true
+end
+
+-- Attach the drag-and-drop handler to the shark group
+shark:addEventListener("touch", handleDrag)
