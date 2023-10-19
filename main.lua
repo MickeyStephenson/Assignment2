@@ -35,8 +35,7 @@ local sheet = graphics.newImageSheet("KingBayonet.png", options)
 local shark = display.newGroup()
 shark.anchorX = -83.5
 shark.anchorY = -25
-shark.x = 350
-shark.y = 300
+
 --Body of the shark
 local body = display.newImage(shark, sheet, 1)
 
@@ -60,6 +59,7 @@ local pectoralSequence =
     name = 'pectoral', start = 8, count = 3, time = 200, loopDirection = "bounce"
 }
 local pectoral = display.newSprite(shark, sheet, pectoralSequence)
+pectoral:toBack()
 
 --Tail of the Shark
 local tailSequence = 
@@ -68,19 +68,22 @@ local tailSequence =
 }
 local tail = display.newSprite(shark, sheet, tailSequence)
 
---Position the parts of the shark
---nose.x = -90.75
---nose.y = 3.5
---mouth.x = - 40
---mouth.y = 7
---pectoral.x = 50
---pectoral.y = -50
---tail.x = 100
---tail.y = -3
+local dorsal = display.newImage(shark, sheet, 14)
+dorsal:toBack()
 
+--Position the parts of the shark
+nose.x = -15.5
+nose.y = 24
+mouth.x = 16
+mouth.y = 19
+pectoral.x = 85
+pectoral.y = 37
+tail.x = 159.5
+tail.y = -24
+dorsal.x = 68
+dorsal.y = -37
+shark.x = 350
+shark.y = 300
 shark.xScale = 4
 shark.yScale = 4
-mouth.isVisible = false
-pectoral.isVisible = false
-tail.isVisible = false
 --tail:play()
