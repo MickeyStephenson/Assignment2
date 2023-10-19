@@ -7,6 +7,9 @@ screenHeight = 640
 display.setDefault("anchorX", 0)
 display.setDefault("anchorY", 0)
 
+--Create Widget
+local widget = require("widget")
+
 -- Create the frames for the sprite
 local options = 
 {
@@ -86,4 +89,22 @@ shark.x = 350
 shark.y = 300
 shark.xScale = 4
 shark.yScale = 4
---tail:play()
+
+-- Create a slider for adjusting the scale of Keen Bayonet
+local slider = widget.newSlider({
+    top = 450,
+    left = 50,
+    width = 400,
+    value = 100, -- 100% scale by default
+})
+
+-- Function to handle slider events
+local function sliderEvent(event)
+    print("event.value")
+    local scale = event.value / 100
+    shark.xScale = 4 * scale
+    shark.yScale = 4 * scale
+end
+print("124")
+-- Add an event listener to the slider
+slider:addEventListener("value", sliderEvent)
