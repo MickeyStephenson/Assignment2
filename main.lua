@@ -89,6 +89,8 @@ shark.x = 350
 shark.y = 300
 shark.xScale = 4
 shark.yScale = 4
+shark.deltaX = 3
+shark.deltaY = 3
 
 -- Function to handle slider events
 local function sliderListener(event)
@@ -108,3 +110,30 @@ local slider = widget.newSlider({
     value = 50, -- 100% scale by default
     listener = sliderListener
 })
+
+-- Create an On-Off switch
+local onOffSwitch = widget.newSwitch
+{
+    left = 0,
+    top = 0,
+    style = "onOff",
+    initialSwitchState = false, -- You can set it to false if you want to start in "off" mode
+}
+
+--This is for the continus movement
+local function update()
+    if onOffSwitch.isOn == true then
+        if shark.x + shark.deltaX > display.contentWidth - 200 or
+        shark.x + shark.deltaX < - 100 then
+            shark.deltaX = -shark.deltaX
+            end
+        if shark.y + shark.deltaY > display.actualContentHeight - 80
+        or shark.y + shark.deltaY < 80 then
+        shark.deltaY = -shark.deltaY
+        end
+        shark.x = shark.x + shark.deltaX
+        shark.y = shark.y + shark.deltaY
+        end
+    end
+
+timer.performWithDelay(20, update, 0)
