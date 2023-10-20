@@ -1,7 +1,7 @@
 --Global Screen Dimensions
 --NOTE: THESE ARE FLIPPED BECAUSE OF LANDSCAPE ORIENTATION
-screenWidth = 1136
-screenHeight = 640
+screenWidth = display.contentWidth
+screenHeight = display.contentHeight
 
 --Sets default anchor point to top left
 display.setDefault("anchorX", 0)
@@ -90,21 +90,21 @@ shark.y = 300
 shark.xScale = 4
 shark.yScale = 4
 
--- Create a slider for adjusting the scale of Keen Bayonet
-local slider = widget.newSlider({
-    top = 450,
-    left = 50,
-    width = 400,
-    value = 100, -- 100% scale by default
-})
-
 -- Function to handle slider events
-local function sliderEvent(event)
-    print("event.value")
+local function sliderListener(event)
     local scale = event.value / 100
+    if (scale == 0) then
+        scale = 0.01
+    end
     shark.xScale = 4 * scale
     shark.yScale = 4 * scale
 end
-print("124")
--- Add an event listener to the slider
-slider:addEventListener("value", sliderEvent)
+
+-- Create a slider for adjusting the scale of Keen Bayonet
+local slider = widget.newSlider({
+    top = 30,
+    left = (screenWidth / 2) - 200,
+    width = 400,
+    value = 50, -- 100% scale by default
+    listener = sliderListener
+})
