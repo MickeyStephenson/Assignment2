@@ -137,3 +137,33 @@ local function update()
     end
 
 timer.performWithDelay(20, update, 0)
+
+-- Function to handle drag-and-drop
+local function handleDrag(event)
+    if onOffSwitch.isOn == true then
+        return true
+    end
+
+    local target = event.target
+    local phase = event.phase
+
+    if phase == "began" then
+        display.getCurrentStage():setFocus(target)
+        target.isFocus = true
+        target.offsetX = event.x - target.x
+        target.offsetY = event.y - target.y
+    elseif target.isFocus then
+        if phase == "moved" then
+            target.x = event.x - target.offsetX
+            target.y = event.y - target.offsetY
+        elseif phase == "ended" or phase == "cancelled" then
+            display.getCurrentStage():setFocus(nil)
+            target.isFocus = false
+        end
+    end
+
+    return true
+end
+
+-- Attach the drag-and-drop handler to the shark group
+shark:addEventListener("touch", handleDrag)
