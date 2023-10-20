@@ -26,8 +26,8 @@ local options =
         {x = 80, y = 99, width = 53, height = 31},   --9 Pectoral Fin 2
         {x = 140, y = 102, width = 54, height = 28}, --10 Pectoral Fin 3
         {x = 210, y = 70, width = 48, height = 92},  --11 Tail 1
-        {x = 267, y = 82, width = 55, height = 70},  --12 Tail 2
-        {x = 331, y = 89, width = 60, height = 56},  --13 Tail 3
+        {x = 267, y = 70, width = 55, height = 92},  --12 Tail 2  if need to change for animation 267, 69, 55, 92
+        {x = 331, y = 70, width = 60, height = 92},  --13 Tail 3  if need to change for animation 331, 69, 60, 92
         {x = 405, y = 93, width = 60, height = 46},  --14 Dorsal Fin
     }
 }
@@ -45,21 +45,24 @@ local body = display.newImage(shark, sheet, 1)
 --Nose of the shark
 local noseSequence = 
 {
-    name = 'nose', start = 2, count = 3
+    {name = 'forward', start = 2, count = 3, time = 500, loopCount = 1},
+    {name = 'backward', start = 4, count = -3, time = 500, loopCount = 1}
 }
 local nose = display.newSprite(shark, sheet, noseSequence)
 
 --Mouth of the shark
 local mouthSequence =
 {
-    name = 'mouth', start = 5, count = 3
+    {name = 'forward', start = 5, count = 3, time = 500, loopCount = 1},
+    {name = 'backward', start = 7, count = -3, time = 500, loopCount = 1}
 }
 local mouth = display.newSprite(shark, sheet, mouthSequence)
 
 --Pectoral Fin of the Shark
 local pectoralSequence = 
 {
-    name = 'pectoral', start = 8, count = 3, time = 200, loopDirection = "bounce"
+    {name = 'forward', start = 8, count = 3, time = 500, loopCount = 1},
+    {name = 'backward', start = 10, count = -3, time = 500, loopCount = 1}
 }
 local pectoral = display.newSprite(shark, sheet, pectoralSequence)
 pectoral:toBack()
@@ -67,7 +70,8 @@ pectoral:toBack()
 --Tail of the Shark
 local tailSequence = 
 {
-    name = 'tail', start = 11, count = 3, time = 200, loopDirection = "bounce"
+    {name = 'forward', start = 11, count = 3, time = 500, loopCount = 1},
+    {name = 'backward', start = 13, count = -3, time = 500, loopCount = 1}
 }
 local tail = display.newSprite(shark, sheet, tailSequence)
 
@@ -167,3 +171,20 @@ end
 
 -- Attach the drag-and-drop handler to the shark group
 shark:addEventListener("touch", handleDrag)
+
+--Event Handler for body part being touched
+local function touchedBodyPart(event)
+    local bodyPart = event.target
+    if bodyPart.sequence == "forward" then
+        bodyPart:play()
+        bodyPart:setSequence("backward")
+    elseif bodyPart.sequence == "backward" then
+        bodyPart:play()
+        bodyPart:setSequence("forward")
+    end
+end
+
+nose:addEventListener("tap", touchedBodyPart)
+mouth:addEventListener("tap", touchedBodyPart)
+pectoral:addEventListener("tap", touchedBodyPart)
+tail:addEventListener("tap", touchedBodyPart)
